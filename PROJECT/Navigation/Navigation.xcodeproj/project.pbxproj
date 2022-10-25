@@ -50,6 +50,9 @@
 		249E43CC278C9896000F4250 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249E43CB278C9896000F4250 /* Constants.swift */; };
 		249E43D0278CAE13000F4250 /* PhotosTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249E43CF278CAE13000F4250 /* PhotosTableViewCell.swift */; };
 		24AF5F8A276E321C00320B24 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AF5F89276E321C00320B24 /* ProfileHeaderView.swift */; };
+		24D6E23928BBF5E000114BD7 /* Checker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D6E23828BBF5E000114BD7 /* Checker.swift */; };
+		24D6E23B28BBFAA900114BD7 /* LoginInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D6E23A28BBFAA900114BD7 /* LoginInspector.swift */; };
+		24D6E23E28BC03B500114BD7 /* LoginFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D6E23D28BC03B500114BD7 /* LoginFactory.swift */; };
 		24F9281D278D9BDD00C779D4 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F9281C278D9BDD00C779D4 /* PhotosViewController.swift */; };
 		24F9281F278DA23A00C779D4 /* PhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F9281E278DA23A00C779D4 /* PhotosCollectionViewCell.swift */; };
 		24F92821278DF3B300C779D4 /* PhotosOpenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F92820278DF3B300C779D4 /* PhotosOpenViewController.swift */; };
@@ -125,6 +128,9 @@
 		249E43CB278C9896000F4250 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = Navigation/Constants.swift; sourceTree = SOURCE_ROOT; };
 		249E43CF278CAE13000F4250 /* PhotosTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosTableViewCell.swift; sourceTree = "<group>"; };
 		24AF5F89276E321C00320B24 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
+		24D6E23828BBF5E000114BD7 /* Checker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checker.swift; sourceTree = "<group>"; };
+		24D6E23A28BBFAA900114BD7 /* LoginInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginInspector.swift; sourceTree = "<group>"; };
+		24D6E23D28BC03B500114BD7 /* LoginFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFactory.swift; sourceTree = "<group>"; };
 		24F9281C278D9BDD00C779D4 /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		24F9281E278DA23A00C779D4 /* PhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		24F92820278DF3B300C779D4 /* PhotosOpenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosOpenViewController.swift; sourceTree = "<group>"; };
@@ -170,6 +176,8 @@
 		241498D3275B9B63003CB903 = {
 			isa = PBXGroup;
 			children = (
+				24D6E23C28BC03A400114BD7 /* Factory */,
+				24D6E23728BBF5CF00114BD7 /* Checker */,
 				247ACD462898973800328721 /* User */,
 				24F9281B278D9BBC00C779D4 /* CollectionView */,
 				24AF5F88276E31CD00320B24 /* Profile */,
@@ -231,6 +239,23 @@
 				249E43CB278C9896000F4250 /* Constants.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		24D6E23728BBF5CF00114BD7 /* Checker */ = {
+			isa = PBXGroup;
+			children = (
+				24D6E23828BBF5E000114BD7 /* Checker.swift */,
+				24D6E23A28BBFAA900114BD7 /* LoginInspector.swift */,
+			);
+			path = Checker;
+			sourceTree = "<group>";
+		};
+		24D6E23C28BC03A400114BD7 /* Factory */ = {
+			isa = PBXGroup;
+			children = (
+				24D6E23D28BC03B500114BD7 /* LoginFactory.swift */,
+			);
+			path = Factory;
 			sourceTree = "<group>";
 		};
 		24F9281B278D9BBC00C779D4 /* CollectionView */ = {
@@ -525,11 +550,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				247ACD4B28989BC500328721 /* CurrentUserService.swift in Sources */,
+				24D6E23928BBF5E000114BD7 /* Checker.swift in Sources */,
 				249E43D0278CAE13000F4250 /* PhotosTableViewCell.swift in Sources */,
 				24F9281F278DA23A00C779D4 /* PhotosCollectionViewCell.swift in Sources */,
 				24F9281D278D9BDD00C779D4 /* PhotosViewController.swift in Sources */,
 				241F7F7927627A6200E660C4 /* ProfileViewController.swift in Sources */,
 				247ACD482898975200328721 /* User.swift in Sources */,
+				24D6E23B28BBFAA900114BD7 /* LoginInspector.swift in Sources */,
+				24D6E23E28BC03B500114BD7 /* LoginFactory.swift in Sources */,
 				24F92821278DF3B300C779D4 /* PhotosOpenViewController.swift in Sources */,
 				249E43CC278C9896000F4250 /* Constants.swift in Sources */,
 				2470A56728A4501900E3C044 /* HipsterCat.swift in Sources */,

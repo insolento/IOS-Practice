@@ -8,6 +8,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow()
         
+        let factory = MyLoginFactory()
+        
         let tabbarController = UITabBarController()
         tabbarController.tabBar.backgroundColor = .systemGray6
         tabbarController.tabBar.layer.borderWidth = 0.5
@@ -29,6 +31,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         logInTabBar.badgeColor = UIColor(named: "VKColor")
         logInTabBar.title = "Log In"
         logInNavigationController.tabBarItem = logInTabBar
+        let loginInspector = factory.makeLoginInspector()
+        logIn.loginDelegate = loginInspector
         
         
         let feed = FeedViewController()
