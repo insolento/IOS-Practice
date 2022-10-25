@@ -14,12 +14,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabbarController.tabBar.layer.borderColor = UIColor.systemGray.cgColor
 
         
-        let profile = ProfileViewController()
-        let profileNavigationController = UINavigationController(rootViewController: profile)
-        let profileName = UITabBarItem()
-        profileName.image = UIImage(systemName: "person.crop.circle")
-        profileName.title = "Profile"
-        profileNavigationController.tabBarItem = profileName
+//        let profile = ProfileViewController(fullName: "Hipster Cat", userService: hipsterCat)
+//        let profileNavigationController = UINavigationController(rootViewController: profile)
+//        let profileName = UITabBarItem()
+//        profileName.image = UIImage(systemName: "person.crop.circle")
+//        profileName.title = "Profile"
+//        profileNavigationController.tabBarItem = profileName
         
         let logIn = LogInViewController()
         let logInNavigationController = UINavigationController(rootViewController: logIn)
