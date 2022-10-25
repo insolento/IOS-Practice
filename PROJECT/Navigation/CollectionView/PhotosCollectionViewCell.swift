@@ -1,4 +1,5 @@
 import UIKit
+import iOSIntPackage
 
 protocol ReusableView: AnyObject {
     static var identifier: String { get }
@@ -33,7 +34,19 @@ class PhotosCollectionViewCell: UICollectionViewCell {
     
     
     func setup(_ photosName: String) {
-        photo.image = UIImage(named: photosName)
+        var actualPhoto = UIImage(named: photosName)
+        photo.image = actualPhoto
+//        actualPhoto = UIImage(data: (actualPhoto ?? UIImage()).jpegData(compressionQuality: 0.1) ?? Data())
+//        let imageProcessor = ImageProcessor()
+//        let filters: [ColorFilter] = [.colorInvert, .fade, .chrome, .noir]
+//        let filter: ColorFilter = filters.randomElement() ?? .fade
+//        imageProcessor.processImage(sourceImage: actualPhoto ?? UIImage(), filter: filter) { filteredImage in photo.image = filteredImage}
+    }
+    private func photoSetup(image: UIImage?) {
+        photo.image = image ?? UIImage()
+        if image != nil {
+            print("photo")
+        }
     }
 }
 
@@ -42,3 +55,5 @@ extension PhotosCollectionViewCell: ReusableView {
         return String(describing: self)
     }
 }
+
+
