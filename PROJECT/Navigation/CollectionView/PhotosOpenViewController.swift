@@ -17,7 +17,9 @@ class PhotosOpenViewController: UIViewController {
     }
     
     func setup(_ image: String) {
-        photo.image = UIImage(named: image)
+        var actualPhoto = UIImage(named: image)
+        actualPhoto = UIImage(data: (actualPhoto ?? UIImage()).jpegData(compressionQuality: 0.99) ?? Data())
+        photo.image = actualPhoto
     }
     
     func layout() {

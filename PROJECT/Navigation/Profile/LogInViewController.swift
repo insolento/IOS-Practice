@@ -2,6 +2,16 @@ import UIKit
 
 class LogInViewController: UIViewController {
     
+    var loginDelegate: LoginViewControllerDelegate?
+    
+    let alertController: UIAlertController = {
+        let alert = UIAlertController(title: " Неправильный пароль ",
+                                      message: "Вы можете попробовать ввести его снова",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Понятно", style: .default, handler: { _ in }))
+        return alert
+    }()
+    
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = true
@@ -18,7 +28,7 @@ class LogInViewController: UIViewController {
         return view
     }()
     
-    let profile: UIViewController = ProfileViewController()
+    //let profile: UIViewController = ProfileViewController(fullName: "Hipster Cat", userService: hipsterCat)
     
     let logoView: UIView = {
         let logoView = UIView()
@@ -52,6 +62,7 @@ class LogInViewController: UIViewController {
         field.layer.borderWidth = 0.5
         field.layer.borderColor = UIColor.lightGray.cgColor
         field.layer.sublayerTransform = CATransform3DMakeTranslation(8, 0, 0)
+        field.text = ""
         return field
     }()
     
@@ -68,6 +79,7 @@ class LogInViewController: UIViewController {
         field.layer.borderColor = UIColor.lightGray.cgColor
         field.isSecureTextEntry = true
         field.layer.sublayerTransform = CATransform3DMakeTranslation(8, 0, 0)
+        field.text = ""
         return field
     }()
     
@@ -93,7 +105,6 @@ class LogInViewController: UIViewController {
         addSubviews()
         view.addGestureRecognizer(tap)
         layout()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -115,7 +126,18 @@ class LogInViewController: UIViewController {
 // Вариант с проверкой на ввод, оставлю закоменченным
     
     @objc func logIn() {
-        self.navigationController?.pushViewController(profile, animated: true)
+        let checkResults = loginDelegate?.check(loginEntered: login.text!, passwordEntered: password.text!)
+        print(checkResults)
+        if checkResults ?? false {
+            #if DEBUG
+            let profile: UIViewController = ProfileViewController(fullName: CurrentHipsterCat.user.fullName, userService: CurrentHipsterCat)
+            #else
+            let profile: UIViewController = ProfileViewController(fullName: TestUserService.user.fullName, userService: TestUserService)
+            #endif
+            self.navigationController?.pushViewController(profile, animated: true)
+        } else {
+            self.present(alertController, animated: true)
+        }
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {

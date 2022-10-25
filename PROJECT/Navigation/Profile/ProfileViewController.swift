@@ -1,21 +1,26 @@
 import UIKit
 
+func emptyProfileController() -> UIViewController {
+    let userService = emptyCurrentUser
+    let profileVC = ProfileViewController(fullName: "", userService: userService)
+    return profileVC
+}
+
 class ProfileViewController: UIViewController {
     
-//    let profileTitle: UIView = {
-//        let profTitle = UIView()
-//        //profTitle.backgroundColor = .white
-//        //profTitle.layer.borderWidth = 1
-//        return profTitle
-//    }()
-//
-//    let profileTitleText: UILabel = {
-//        let profTitleText = UILabel()
-//        //profTitleText.text = "Profile"
-//        profTitleText.font = UIFont.systemFont(ofSize: 32, weight:.regular)
-//        return profTitleText
-//    }()
-    //Добавил уже нормально этот тайтл
+    var fullName: String
+
+    var userService: UserService
+
+    init(fullName: String, userService: UserService) {
+        self.fullName = fullName
+        self.userService = userService
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     fileprivate let postInf: [(String, String, String, Int, Int)] = [
         ("holliwood_news", PostDescriptions.holliwoodNewsHamilton, "holliwoodNewsHamiltonPhoto", 2446,5400),
@@ -38,8 +43,9 @@ class ProfileViewController: UIViewController {
         return tableView
     }()
     
-    let headerView: UIView = {
-        let headerView = ProfileHeaderView()
+    var headerView: ProfileHeaderView = {
+        var headerView = ProfileHeaderView()
+        //headerView.layer.contents = userService.
         headerView.translatesAutoresizingMaskIntoConstraints = false
         return headerView
     }()
@@ -47,6 +53,7 @@ class ProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        headerViewSetup()
         addSubviews()
         autoresizingMask()
         layout()
@@ -54,7 +61,7 @@ class ProfileViewController: UIViewController {
         #if DEBUG
         view.backgroundColor = .systemBlue
         #else
-        view.backgroundColor = .systemGreen
+        view.backgroundColor = .systemGray6
         #endif
         
         tableView.dataSource = self
@@ -73,6 +80,13 @@ class ProfileViewController: UIViewController {
         guard let indexPath = tableView.indexPathForSelectedRow else { return
         }
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func headerViewSetup() {
+        let currentUser: User = userService.findUser(userName: fullName)
+        headerView.hipsterCat.text = currentUser.fullName
+        headerView.catImageView.layer.contents = currentUser.profileImage.cgImage
+        headerView.statusTextField.text = currentUser.status
     }
     
     func addSubviews() {
