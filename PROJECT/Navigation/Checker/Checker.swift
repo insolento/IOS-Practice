@@ -6,11 +6,7 @@ class Checker {
     private let login = "Hypster Cat"
     
     func check(loginEntered: String, passwordEntered: String) -> Bool {
-        if loginEntered == login && passwordEntered == password {
-            return true
-        } else {
-            return false
-        }
+        return loginEntered == login && passwordEntered == password
     }
 }
 

@@ -1,6 +1,10 @@
 import UIKit
+import iOSIntPackage
 
 class PhotosViewController: UIViewController {
+    
+    let imageFacade = ImagePublisherFacade()
+    
     
     private enum LayoutConstant {
         static let spacing: CGFloat = 8.0
@@ -14,8 +18,29 @@ class PhotosViewController: UIViewController {
     }()
     
     
-    lazy var photos: [String] = []
-
+    var imageList: [UIImage] = [
+        UIImage(named: "photo1") ?? UIImage(),
+        UIImage(named: "photo2") ?? UIImage(),
+        UIImage(named: "photo3") ?? UIImage(),
+        UIImage(named: "photo4") ?? UIImage(),
+        UIImage(named: "photo5") ?? UIImage(),
+        UIImage(named: "photo6") ?? UIImage(),
+        UIImage(named: "photo7") ?? UIImage(),
+        UIImage(named: "photo8") ?? UIImage(),
+        UIImage(named: "photo9") ?? UIImage(),
+        UIImage(named: "photo10") ?? UIImage(),
+        UIImage(named: "photo11") ?? UIImage(),
+        UIImage(named: "photo12") ?? UIImage(),
+        UIImage(named: "photo13") ?? UIImage(),
+        UIImage(named: "photo14") ?? UIImage(),
+        UIImage(named: "photo15") ?? UIImage(),
+        UIImage(named: "photo16") ?? UIImage(),
+        UIImage(named: "photo17") ?? UIImage(),
+        UIImage(named: "photo18") ?? UIImage(),
+        UIImage(named: "photo19") ?? UIImage(),
+        UIImage(named: "photo20") ?? UIImage()
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,13 +53,16 @@ class PhotosViewController: UIViewController {
         photosCollection.delegate = self
         photosCollection.register(PhotosCollectionViewCell.self, forCellWithReuseIdentifier: PhotosCollectionViewCell.identifier)
         
-        for i in 1...20 {
-            let photoName = "photo" + String(i)
-            photos.append(photoName)
-            print("adding photo")
-        }
+        imageFacade.subscribe(self)
+        imageFacade.addImagesWithTimer(time: 0.5, repeat: 20, userImages: imageList)
+        
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.imageFacade.removeSubscription(for: self)
+    }
+
     func layout() {
         NSLayoutConstraint.activate([
             photosCollection.topAnchor.constraint(equalTo: view.topAnchor),
@@ -47,12 +75,12 @@ class PhotosViewController: UIViewController {
 
 extension PhotosViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        photos.count
+        imageList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = photosCollection.dequeueReusableCell(withReuseIdentifier: PhotosCollectionViewCell.identifier, for: indexPath) as! PhotosCollectionViewCell
-        let data = photos[indexPath.row]
+        let data = imageList[indexPath.row]
         cell.setup(data)
         return cell
     }
@@ -118,4 +146,17 @@ extension PhotosViewController: UICollectionViewDelegateFlowLayout {
             newViewController.setup(photoName)
             navigationController?.pushViewController(newViewController, animated: true)
         }
+}
+
+extension PhotosViewController: ImageLibrarySubscriber {
+    
+    func receive(images: [UIImage]) {
+        imageList.removeAll()
+        for i in images {
+            if !imageList.contains(i) {
+                imageList.append(i)
+            }
+        }
+        photosCollection.reloadData()
+    }
 }

@@ -33,8 +33,8 @@ class PhotosCollectionViewCell: UICollectionViewCell {
     }
     
     
-    func setup(_ photosName: String) {
-        let actualPhoto = UIImage(named: photosName)
+    func setup(_ photosName: UIImage) {
+        let actualPhoto = photosName
         photo.image = actualPhoto
 //        actualPhoto = UIImage(data: (actualPhoto ?? UIImage()).jpegData(compressionQuality: 0.1) ?? Data())
 //        let imageProcessor = ImageProcessor()
