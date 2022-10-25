@@ -37,16 +37,12 @@ class LogInViewController: UIViewController {
         return logoView
     }()
     
-    let logInButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.cornerRadius = 10
+    let logInButton: CustomButton = {
+        let button = CustomButton(title: "Log In", titleColor: .white, radius: 10, backgroundColor: .clear)
         button.layer.masksToBounds = true
         button.setBackgroundImage(UIImage(named: "blue_pixel"), for: .normal)
-        button.setTitle("Log In", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        button.titleLabel?.textColor = .black
-        button.addTarget(self, action: #selector(logIn), for: .touchUpInside)
+        //button.addTarget(self, action: #selector(logIn), for: .touchUpInside)
         return button
     }()
     
@@ -105,11 +101,18 @@ class LogInViewController: UIViewController {
         addSubviews()
         view.addGestureRecognizer(tap)
         layout()
+        setupButton()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.navigationController?.navigationBar.isHidden = true
+    }
+    
+    func setupButton() {
+        logInButton.function = { [weak self] in
+            self?.logIn()
+        }
     }
     
     @objc func dismissKeyboard() {
@@ -125,9 +128,8 @@ class LogInViewController: UIViewController {
 //    }
 // Вариант с проверкой на ввод, оставлю закоменченным
     
-    @objc func logIn() {
+    func logIn() {
         let checkResults = loginDelegate?.check(loginEntered: login.text!, passwordEntered: password.text!)
-        print(checkResults)
         if checkResults ?? false {
             #if DEBUG
             let profile: UIViewController = ProfileViewController(fullName: CurrentHipsterCat.user.fullName, userService: CurrentHipsterCat)

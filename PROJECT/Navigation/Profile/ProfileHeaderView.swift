@@ -14,17 +14,12 @@ class ProfileHeaderView: UIView {
     
     var statusLabel: String = "Waiting for something..."
     
-    let showStatusButton: UIButton = {
-        let statusButton = UIButton(type: .system)
-        statusButton.setTitle("Show status", for: .normal)
-        statusButton.setTitleColor(.white, for: .normal)
-        statusButton.backgroundColor = .blue
-        statusButton.layer.cornerRadius = 4
+    let showStatusButton: CustomButton = {
+        let statusButton = CustomButton(title: "Show status", titleColor: .white, radius: 4, backgroundColor: .blue)
         statusButton.layer.shadowOffset = CGSize(width: 4, height: 4)
         statusButton.layer.shadowRadius = 4
         statusButton.layer.shadowColor = UIColor.black.cgColor
         statusButton.layer.shadowOpacity = 0.7
-        statusButton.addTarget(nil,action:#selector(buttonAction), for: .touchUpInside)
         return statusButton
     }()
     
@@ -61,10 +56,13 @@ class ProfileHeaderView: UIView {
         layout()
         backgroundColor = .systemGray6
         statusTextField.text = statusLabel
+        buttonSetup()
     }
     
-    @objc func buttonAction() {
-        print(statusLabel)
+     func buttonSetup() {
+         showStatusButton.function = {
+            print(self.statusLabel)
+        }
     }
     
     func autoresizingMaks() {
