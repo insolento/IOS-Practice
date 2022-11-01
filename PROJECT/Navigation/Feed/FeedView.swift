@@ -1,13 +1,20 @@
 import Foundation
 import UIKit
 
-protocol OpenPostProtocol {
-    func openController(controller: UIViewController)
-}
-
-class FeedViewController: UIViewController, OpenPostProtocol {
+class FeedViewController: UIViewController {
     
     var viewModel: FeedViewModelProtocol?
+    weak var coordinator: FeedCoordinator?
+    
+    init(viewModel: FeedViewModelProtocol, coordinator: FeedCoordinator) {
+        self.viewModel = viewModel
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     let postController = PostViewController()
     
@@ -106,10 +113,6 @@ class FeedViewController: UIViewController, OpenPostProtocol {
         }
     }
 
-    func openController(controller: UIViewController) {
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
-
     @objc func wrongWord() {
         coreectnessLabel.text = "Слово неверное"
         coreectnessLabel.textColor = .red
@@ -121,7 +124,8 @@ class FeedViewController: UIViewController, OpenPostProtocol {
     }
     
     @objc func openPost() {
-        self.navigationController?.pushViewController(postController, animated: true)
+        let postCoordinator = PostCoordinator()
+        postCoordinator.getCoordinator(navigation: navigationController ?? UINavigationController(), coordinator: postCoordinator)
     }
 
     func stackAddSubviews() {

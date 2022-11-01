@@ -8,9 +8,8 @@ class AppCoordinator: Coordinator {
         self.navigationController = navigationController
     }
     
-    func start() {
-        let vc = TabBarController()
-        
+    func start() -> UIViewController {
+        return MainTabBarController()
     }
     
     

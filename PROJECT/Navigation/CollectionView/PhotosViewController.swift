@@ -130,11 +130,9 @@ extension PhotosViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath) {
-            print("Did select cell at \(indexPath.row)")
-            let newViewController = PhotosOpenViewController()
             let photoName = "photo" + String(indexPath.row+1)
-            newViewController.setup(photoName)
-            navigationController?.pushViewController(newViewController, animated: true)
+            let coordinator = PhotoCoordinator()
+            coordinator.getCoordinator(navigation: navigationController, coordinator: coordinator, photoName: "photo" + String(indexPath.row+1))
         }
 }
 

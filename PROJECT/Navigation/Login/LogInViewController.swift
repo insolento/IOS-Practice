@@ -131,12 +131,12 @@ class LogInViewController: UIViewController {
     func logIn() {
         let checkResults = loginDelegate?.check(loginEntered: login.text!, passwordEntered: password.text!)
         if checkResults ?? false {
+            let coordinator = ProfileCoordinator()
             #if DEBUG
-            let profile: UIViewController = ProfileViewController(fullName: CurrentHipsterCat.user.fullName, userService: CurrentHipsterCat)
+            coordinator.getCoordinator(navigation: navigationController, coordinator: coordinator, fullName: CurrentHipsterCat.user.fullName, userSrvice: CurrentHipsterCat)
             #else
-            let profile: UIViewController = ProfileViewController(fullName: TestUserService.user.fullName, userService: TestUserService)
+            coordinator.getCoordinator(navigation: navigationController, coordinator: coordinator, fullName: TestUserService.user.fullName, userSrvice: TestUserService)
             #endif
-            self.navigationController?.pushViewController(profile, animated: true)
         } else {
             self.present(alertController, animated: true)
         }
