@@ -18,12 +18,28 @@ class PhotosViewController: UIViewController {
     }()
     
     
-    //lazy var photos: [String] = []
-    var imageList: [UIImage] = []
-    //это массив в который я добавляю всё с подписки, то есть фото
-    var imageSendingList: [UIImage] = []
-    //это массив, который полный с 20 фото, его я отправляю
-    
+    var imageList: [UIImage] = [
+        UIImage(named: "photo1") ?? UIImage(),
+        UIImage(named: "photo2") ?? UIImage(),
+        UIImage(named: "photo3") ?? UIImage(),
+        UIImage(named: "photo4") ?? UIImage(),
+        UIImage(named: "photo5") ?? UIImage(),
+        UIImage(named: "photo6") ?? UIImage(),
+        UIImage(named: "photo7") ?? UIImage(),
+        UIImage(named: "photo8") ?? UIImage(),
+        UIImage(named: "photo9") ?? UIImage(),
+        UIImage(named: "photo10") ?? UIImage(),
+        UIImage(named: "photo11") ?? UIImage(),
+        UIImage(named: "photo12") ?? UIImage(),
+        UIImage(named: "photo13") ?? UIImage(),
+        UIImage(named: "photo14") ?? UIImage(),
+        UIImage(named: "photo15") ?? UIImage(),
+        UIImage(named: "photo16") ?? UIImage(),
+        UIImage(named: "photo17") ?? UIImage(),
+        UIImage(named: "photo18") ?? UIImage(),
+        UIImage(named: "photo19") ?? UIImage(),
+        UIImage(named: "photo20") ?? UIImage()
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,21 +53,15 @@ class PhotosViewController: UIViewController {
         photosCollection.delegate = self
         photosCollection.register(PhotosCollectionViewCell.self, forCellWithReuseIdentifier: PhotosCollectionViewCell.identifier)
         
-        for i in 1...20 {
-            // Тут я просто создаю список imageSendingList
-            let photoName = "photo" + String(i)
-            imageSendingList.append(UIImage(named: photoName) ?? UIImage())
-            print(photoName)
-        }
-        
         imageFacade.subscribe(self)
-        imageFacade.addImagesWithTimer(time: 0.5, repeat: 20, userImages: imageSendingList)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-            self.imageFacade.removeSubscription(for: self)
-        }
-        //по идее это как раз идеальный момент для отмены подписки, но возможно в идее было что то другое
+        imageFacade.addImagesWithTimer(time: 0.5, repeat: 20, userImages: imageList)
+        
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.imageFacade.removeSubscription(for: self)
+    }
 
     func layout() {
         NSLayoutConstraint.activate([
@@ -130,18 +140,20 @@ extension PhotosViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath) {
-            print("Did select cell at \(indexPath.row)")
-            let newViewController = PhotosOpenViewController()
-            let photoName = "photo" + String(indexPath.row+1)
-            newViewController.setup(photoName)
-            navigationController?.pushViewController(newViewController, animated: true)
+            let coordinator = PhotoCoordinator()
+            coordinator.getCoordinator(navigation: navigationController, coordinator: coordinator, photoName: "photo" + String(indexPath.row+1))
         }
 }
 
 extension PhotosViewController: ImageLibrarySubscriber {
     
     func receive(images: [UIImage]) {
-        imageList = images
+        imageList.removeAll()
+        for i in images {
+            if !imageList.contains(i) {
+                imageList.append(i)
+            }
+        }
         photosCollection.reloadData()
     }
 }
