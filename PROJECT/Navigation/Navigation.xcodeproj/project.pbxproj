@@ -192,6 +192,7 @@
 		241498D3275B9B63003CB903 = {
 			isa = PBXGroup;
 			children = (
+				2DA1050D2912C17000D859B9 /* Threads */,
 				2D35481329103E0300D0EEEE /* Coordinator */,
 				2D354810290F5BCA00D0EEEE /* Login */,
 				24AF5F88276E31CD00320B24 /* Profile */,
@@ -348,6 +349,13 @@
 				2D3548222911C54A00D0EEEE /* LoginCoordinator.swift */,
 			);
 			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		2DA1050D2912C17000D859B9 /* Threads */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Threads;
 			sourceTree = "<group>";
 		};
 		5EC2C059252FEEE4F484D78F /* Frameworks */ = {
@@ -845,7 +853,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 438U5Y8KH6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Navigation/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -874,7 +882,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 438U5Y8KH6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Navigation/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

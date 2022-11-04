@@ -187,7 +187,6 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let uiView = UIView()
         if section == 0 {
-            print(section)
             tableView.addSubview(headerView)
             headerView.heightAnchor.constraint(equalToConstant: 220).isActive = true
             headerView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.width).isActive = true

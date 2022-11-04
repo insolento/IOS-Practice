@@ -1,9 +1,33 @@
 import UIKit
 import iOSIntPackage
+import CoreFoundation
+
+class ParkBenchTimer {
+    let startTime:CFAbsoluteTime
+    var endTime:CFAbsoluteTime?
+
+    init() {
+        startTime = CFAbsoluteTimeGetCurrent()
+    }
+
+    func stop() -> CFAbsoluteTime {
+        endTime = CFAbsoluteTimeGetCurrent()
+
+        return duration!
+    }
+
+    var duration: CFAbsoluteTime? {
+        if let endTime = endTime {
+            return endTime - startTime
+        } else {
+            return nil
+        }
+    }
+}
 
 class PhotosViewController: UIViewController {
     
-    let imageFacade = ImagePublisherFacade()
+    //let imageFacade = ImagePublisherFacade()
     
     
     private enum LayoutConstant {
@@ -18,28 +42,10 @@ class PhotosViewController: UIViewController {
     }()
     
     
-    var imageList: [UIImage] = [
-        UIImage(named: "photo1") ?? UIImage(),
-        UIImage(named: "photo2") ?? UIImage(),
-        UIImage(named: "photo3") ?? UIImage(),
-        UIImage(named: "photo4") ?? UIImage(),
-        UIImage(named: "photo5") ?? UIImage(),
-        UIImage(named: "photo6") ?? UIImage(),
-        UIImage(named: "photo7") ?? UIImage(),
-        UIImage(named: "photo8") ?? UIImage(),
-        UIImage(named: "photo9") ?? UIImage(),
-        UIImage(named: "photo10") ?? UIImage(),
-        UIImage(named: "photo11") ?? UIImage(),
-        UIImage(named: "photo12") ?? UIImage(),
-        UIImage(named: "photo13") ?? UIImage(),
-        UIImage(named: "photo14") ?? UIImage(),
-        UIImage(named: "photo15") ?? UIImage(),
-        UIImage(named: "photo16") ?? UIImage(),
-        UIImage(named: "photo17") ?? UIImage(),
-        UIImage(named: "photo18") ?? UIImage(),
-        UIImage(named: "photo19") ?? UIImage(),
-        UIImage(named: "photo20") ?? UIImage()
-    ]
+    var imageList = (1...20).compactMap {UIImage(named: "photo\($0)")}
+    var imagesProcessed = [UIImage]()
+    
+    let imageProcessor = ImageProcessor()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,15 +58,27 @@ class PhotosViewController: UIViewController {
         photosCollection.dataSource = self
         photosCollection.delegate = self
         photosCollection.register(PhotosCollectionViewCell.self, forCellWithReuseIdentifier: PhotosCollectionViewCell.identifier)
+        filter()
         
-        imageFacade.subscribe(self)
-        imageFacade.addImagesWithTimer(time: 0.5, repeat: 20, userImages: imageList)
-        
+        //imageFacade.subscribe(self)
+        //imageFacade.addImagesWithTimer(time: 0.5, repeat: 20, userImages: imageList)
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.imageFacade.removeSubscription(for: self)
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        self.imageFacade.removeSubscription(for: self)
+//    }
+
+    func filter() {
+        let filters: [ColorFilter] = [.colorInvert, .fade, .chrome, .noir]
+        let timer = ParkBenchTimer()
+        imageProcessor.processImagesOnThread(sourceImages: imageList, filter: filters.randomElement() ?? .fade, qos: .userInteractive, completion: { cgImages in
+            self.imagesProcessed = cgImages.map({UIImage(cgImage: $0!)})
+            DispatchQueue.main.async {
+                self.photosCollection.reloadData()
+                print(self.imagesProcessed.count)
+                print("\(timer.stop()) seconds.")
+            }
+        })
     }
 
     func layout() {
@@ -75,12 +93,12 @@ class PhotosViewController: UIViewController {
 
 extension PhotosViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        imageList.count
+        imagesProcessed.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = photosCollection.dequeueReusableCell(withReuseIdentifier: PhotosCollectionViewCell.identifier, for: indexPath) as! PhotosCollectionViewCell
-        let data = imageList[indexPath.row]
+        let data = imagesProcessed[indexPath.row]
         cell.setup(data)
         return cell
     }
@@ -145,15 +163,15 @@ extension PhotosViewController: UICollectionViewDelegateFlowLayout {
         }
 }
 
-extension PhotosViewController: ImageLibrarySubscriber {
-    
-    func receive(images: [UIImage]) {
-        imageList.removeAll()
-        for i in images {
-            if !imageList.contains(i) {
-                imageList.append(i)
-            }
-        }
-        photosCollection.reloadData()
-    }
-}
+//extension PhotosViewController: ImageLibrarySubscriber {
+//
+//    func receive(images: [UIImage]) {
+//        imageList.removeAll()
+//        for i in images {
+//            if !imageList.contains(i) {
+//                imageList.append(i)
+//            }
+//        }
+//        photosCollection.reloadData()
+//    }
+//}
