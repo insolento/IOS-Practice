@@ -60,27 +60,38 @@ class PhotosViewController: UIViewController {
         photosCollection.register(PhotosCollectionViewCell.self, forCellWithReuseIdentifier: PhotosCollectionViewCell.identifier)
         filter()
         
-        //imageFacade.subscribe(self)
-        //imageFacade.addImagesWithTimer(time: 0.5, repeat: 20, userImages: imageList)
     }
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        self.imageFacade.removeSubscription(for: self)
-//    }
 
     func filter() {
-        let filters: [ColorFilter] = [.colorInvert, .fade, .chrome, .noir]
         let timer = ParkBenchTimer()
-        imageProcessor.processImagesOnThread(sourceImages: imageList, filter: filters.randomElement() ?? .fade, qos: .userInteractive, completion: { cgImages in
+        imageProcessor.processImagesOnThread(sourceImages: imageList, filter: .fade, qos: .default, completion: { cgImages in
             self.imagesProcessed = cgImages.map({UIImage(cgImage: $0!)})
             DispatchQueue.main.async {
                 self.photosCollection.reloadData()
                 print(self.imagesProcessed.count)
+                //тут видно что на этом моменте список фото уже подгружен в 20 к-во, то есть время загрузки точное
                 print("\(timer.stop()) seconds.")
             }
         })
     }
-
+    /*
+     Получилось так, что время обработки и отображения фото на симуляторе сильно отличается
+     Я так понимаю именно загрузка готовых фото занимаает долгое время, поэтому я с помощью секундомера буду замерять и это
+     Тестовый симулятор IPhone 14 Pro, IOS 15.0
+     .userInteractive - обработка фото = 6.13 sec; появление фото = 47.43 sec
+     .userInitiated - обработка фото = 6.28 sec; появление фото = 47.42 sec
+     .default - обработка фото = 6.03 sec; появление фото = 47.08 sec
+     .background - обработка фото = 9.89 sec; появление фото = 49.98 sec
+     .utility - обработка фото = 6.66 sec; появление фото = 47.25 sec
+     */
+    /*
+     Получается что .default обработал быстрее всех, поэтому проведём тест на реальном устройстве именно с .default!
+     Тестировать буду на IPhone 13 Pro IOS 16.0
+     Обработка фото = 0.74 sec; появление фото = 23.14 sec
+     Почему так долго появляются фото я честно говоря не понимаю
+     И тут вопрос, если я в теории поставлю анимацию загрузки, до появления фото, это разве можно как то оттрекать?
+     Нету ж команды, которая скажет мне когда отобразиться фото, ну или ошибаюсь?
+     */
     func layout() {
         NSLayoutConstraint.activate([
             photosCollection.topAnchor.constraint(equalTo: view.topAnchor),
