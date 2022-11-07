@@ -2,6 +2,8 @@ import Foundation
 import UIKit
 
 final class LoginCoordinator {
+    
+    
     func getCoordinator(coordinator: LoginCoordinator) -> UIViewController {
         let factory = MyLoginFactory()
         let logIn = LogInViewController()

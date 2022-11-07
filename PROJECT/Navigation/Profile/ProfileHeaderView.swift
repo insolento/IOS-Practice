@@ -12,6 +12,8 @@ class ProfileHeaderView: UIView {
         super.init(coder: aDecoder)
     }
     
+    let imageList = (1...20).compactMap {UIImage(named: "photo\($0)")}
+    
     var statusLabel: String = "Waiting for something..."
     
     let showStatusButton: CustomButton = {
@@ -57,7 +59,17 @@ class ProfileHeaderView: UIView {
         backgroundColor = .systemGray6
         statusTextField.text = statusLabel
         buttonSetup()
+        photoTimer()
     }
+    
+    func photoTimer() {
+        let changePhotoTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(changePhoto), userInfo: nil, repeats: true)
+    }
+    
+    @objc func changePhoto() {
+        catImageView.layer.contents = imageList.randomElement()?.cgImage
+    }
+    //Смена котов на аватарке каждые 5 секунд, вродь прикольно
     
      func buttonSetup() {
          showStatusButton.function = {
