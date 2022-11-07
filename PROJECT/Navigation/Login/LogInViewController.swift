@@ -4,6 +4,8 @@ class LogInViewController: UIViewController {
     
     var loginDelegate: LoginViewControllerDelegate?
     
+    let activityIndicatorView = UIActivityIndicatorView(style: .medium)
+    
     let alertController: UIAlertController = {
         let alert = UIAlertController(title: " Неправильный пароль ",
                                       message: "Вы можете попробовать ввести его снова",
@@ -42,7 +44,6 @@ class LogInViewController: UIViewController {
         button.layer.masksToBounds = true
         button.setBackgroundImage(UIImage(named: "blue_pixel"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        //button.addTarget(self, action: #selector(logIn), for: .touchUpInside)
         return button
     }()
     
@@ -89,6 +90,13 @@ class LogInViewController: UIViewController {
         return loginView
     }()
     
+    let bruteButton: CustomButton = {
+        let button = CustomButton(title: "Подобрать пароль", titleColor: .blue, radius: 10, backgroundColor: .clear)
+        button.layer.masksToBounds = true
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
@@ -102,6 +110,7 @@ class LogInViewController: UIViewController {
         view.addGestureRecognizer(tap)
         layout()
         setupButton()
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -112,6 +121,9 @@ class LogInViewController: UIViewController {
     func setupButton() {
         logInButton.function = { [weak self] in
             self?.logIn()
+        }
+        bruteButton.function = { [weak self] in
+            self?.bruteAdding()
         }
     }
     
@@ -156,16 +168,33 @@ class LogInViewController: UIViewController {
         }
     }
     
+    func bruteAdding() {
+        activityIndicatorView.startAnimating()
+        var brutePassword = ""
+        let bruteItem = DispatchWorkItem {
+            let bruteForce = BruteForce()
+            brutePassword = bruteForce.bruteForce()
+            //self.activityIndicatorView.stopAnimating()
+        }
+        self.password.text = brutePassword
+        self.password.isSecureTextEntry = false
+        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 5, execute: bruteItem)
+    }
+    
     func addSubviews() {
         view.addSubview(logInButton)
         view.addSubview(logoView)
         view.addSubview(loginView)
         view.addSubview(scrollView)
+        view.addSubview(bruteButton)
+        view.addSubview(activityIndicatorView)
         loginView.addSubview(login)
         loginView.addSubview(password)
         scrollView.addSubview(logInButton)
         scrollView.addSubview(logoView)
         scrollView.addSubview(loginView)
+        scrollView.addSubview(bruteButton)
+        scrollView.addSubview(activityIndicatorView)
     }
     
     func layout() {
@@ -193,7 +222,14 @@ class LogInViewController: UIViewController {
             login.topAnchor.constraint(equalTo: loginView.topAnchor),
             login.leadingAnchor.constraint(equalTo: loginView.leadingAnchor),
             login.trailingAnchor.constraint(equalTo: loginView.trailingAnchor),
-            login.heightAnchor.constraint(equalToConstant: 50)
+            login.heightAnchor.constraint(equalToConstant: 50),
+            bruteButton.leadingAnchor.constraint(equalTo: logInButton.leadingAnchor, constant: 40),
+            bruteButton.trailingAnchor.constraint(equalTo: logInButton.trailingAnchor, constant: -40),
+            bruteButton.topAnchor.constraint(equalTo: logInButton.bottomAnchor, constant: 16),
+            activityIndicatorView.leadingAnchor.constraint(equalTo: bruteButton.trailingAnchor),
+            activityIndicatorView.topAnchor.constraint(equalTo: bruteButton.topAnchor, constant: 8),
+            activityIndicatorView.widthAnchor.constraint(equalToConstant: 16),
+            activityIndicatorView.heightAnchor.constraint(equalToConstant: 16),
         ])
     }
 }
