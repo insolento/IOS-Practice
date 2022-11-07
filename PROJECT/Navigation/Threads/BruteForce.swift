@@ -3,12 +3,12 @@ import Foundation
 
 class BruteForce {
     func bruteForce() -> String {
-        var bruteString = String()
-        let allChars = bruteString.printable
+        let allChars = String().printable
         var imageList = ""
         for _ in 1...20 {
             imageList.append(allChars.randomElement().map(String.init)!)
         }
+        print(imageList)
         return imageList
     }
 }

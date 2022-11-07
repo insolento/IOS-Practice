@@ -174,11 +174,15 @@ class LogInViewController: UIViewController {
         let bruteItem = DispatchWorkItem {
             let bruteForce = BruteForce()
             brutePassword = bruteForce.bruteForce()
-            //self.activityIndicatorView.stopAnimating()
+            print("firinciore")
         }
-        self.password.text = brutePassword
-        self.password.isSecureTextEntry = false
-        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 5, execute: bruteItem)
+        let endAnmationItem = {
+            self.activityIndicatorView.stopAnimating()
+            self.password.text = brutePassword
+            self.password.isSecureTextEntry = false
+        }
+        bruteItem.notify(queue: .main, execute: endAnmationItem)
+        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 2, execute: bruteItem)
     }
     
     func addSubviews() {
