@@ -173,8 +173,7 @@ class LogInViewController: UIViewController {
         var brutePassword = ""
         let bruteItem = DispatchWorkItem {
             let bruteForce = BruteForce()
-            brutePassword = bruteForce.bruteForce()
-            print("firinciore")
+            brutePassword = bruteForce.bruteForce(passwordToUnlock: "123q")
         }
         let endAnmationItem = {
             self.activityIndicatorView.stopAnimating()
@@ -182,7 +181,8 @@ class LogInViewController: UIViewController {
             self.password.isSecureTextEntry = false
         }
         bruteItem.notify(queue: .main, execute: endAnmationItem)
-        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 2, execute: bruteItem)
+        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 1, execute: bruteItem)
+        //Добавил секунду ожидания, что б даже с самым простым паролем успела сыграть анимация
     }
     
     func addSubviews() {

@@ -2,8 +2,8 @@ import UIKit
 
 class Checker {
     
-    private let password = "1"
-    private let login = "H"
+    private let password = "123q"
+    private let login = "Hypster"
     
     func check(loginEntered: String, passwordEntered: String) -> Bool {
         return loginEntered == login && passwordEntered == password
