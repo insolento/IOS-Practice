@@ -63,7 +63,7 @@ class ProfileHeaderView: UIView {
     }
     
     func photoTimer() {
-        let changePhotoTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(changePhoto), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(changePhoto), userInfo: nil, repeats: true)
     }
     
     @objc func changePhoto() {
