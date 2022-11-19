@@ -1,9 +1,33 @@
 import UIKit
 import iOSIntPackage
+import CoreFoundation
+
+class ParkBenchTimer {
+    let startTime:CFAbsoluteTime
+    var endTime:CFAbsoluteTime?
+
+    init() {
+        startTime = CFAbsoluteTimeGetCurrent()
+    }
+
+    func stop() -> CFAbsoluteTime {
+        endTime = CFAbsoluteTimeGetCurrent()
+
+        return duration!
+    }
+
+    var duration: CFAbsoluteTime? {
+        if let endTime = endTime {
+            return endTime - startTime
+        } else {
+            return nil
+        }
+    }
+}
 
 class PhotosViewController: UIViewController {
     
-    let imageFacade = ImagePublisherFacade()
+    //let imageFacade = ImagePublisherFacade()
     
     
     private enum LayoutConstant {
@@ -18,12 +42,10 @@ class PhotosViewController: UIViewController {
     }()
     
     
-    //lazy var photos: [String] = []
-    var imageList: [UIImage] = []
-    //это массив в который я добавляю всё с подписки, то есть фото
-    var imageSendingList: [UIImage] = []
-    //это массив, который полный с 20 фото, его я отправляю
+    var imageList = (1...20).compactMap {UIImage(named: "photo\($0)")}
+    var imagesProcessed = [UIImage]()
     
+    let imageProcessor = ImageProcessor()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,22 +58,28 @@ class PhotosViewController: UIViewController {
         photosCollection.dataSource = self
         photosCollection.delegate = self
         photosCollection.register(PhotosCollectionViewCell.self, forCellWithReuseIdentifier: PhotosCollectionViewCell.identifier)
+        filter()
         
-        for i in 1...20 {
-            // Тут я просто создаю список imageSendingList
-            let photoName = "photo" + String(i)
-            imageSendingList.append(UIImage(named: photoName) ?? UIImage())
-            print(photoName)
-        }
-        
-        imageFacade.subscribe(self)
-        imageFacade.addImagesWithTimer(time: 0.5, repeat: 20, userImages: imageSendingList)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-            self.imageFacade.removeSubscription(for: self)
-        }
-        //по идее это как раз идеальный момент для отмены подписки, но возможно в идее было что то другое
+        //imageFacade.subscribe(self)
+        //imageFacade.addImagesWithTimer(time: 0.5, repeat: 20, userImages: imageList)
     }
-    
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        self.imageFacade.removeSubscription(for: self)
+//    }
+
+    func filter() {
+        let filters: [ColorFilter] = [.colorInvert, .fade, .chrome, .noir]
+        let timer = ParkBenchTimer()
+        imageProcessor.processImagesOnThread(sourceImages: imageList, filter: filters.randomElement() ?? .fade, qos: .userInteractive, completion: { cgImages in
+            self.imagesProcessed = cgImages.map({UIImage(cgImage: $0!)})
+            DispatchQueue.main.async {
+                self.photosCollection.reloadData()
+                print(self.imagesProcessed.count)
+                print("\(timer.stop()) seconds.")
+            }
+        })
+    }
 
     func layout() {
         NSLayoutConstraint.activate([
@@ -65,12 +93,12 @@ class PhotosViewController: UIViewController {
 
 extension PhotosViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        imageList.count
+        imagesProcessed.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = photosCollection.dequeueReusableCell(withReuseIdentifier: PhotosCollectionViewCell.identifier, for: indexPath) as! PhotosCollectionViewCell
-        let data = imageList[indexPath.row]
+        let data = imagesProcessed[indexPath.row]
         cell.setup(data)
         return cell
     }
@@ -130,18 +158,20 @@ extension PhotosViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath) {
-            print("Did select cell at \(indexPath.row)")
-            let newViewController = PhotosOpenViewController()
-            let photoName = "photo" + String(indexPath.row+1)
-            newViewController.setup(photoName)
-            navigationController?.pushViewController(newViewController, animated: true)
+            let coordinator = PhotoCoordinator()
+            coordinator.getCoordinator(navigation: navigationController, coordinator: coordinator, photoName: "photo" + String(indexPath.row+1))
         }
 }
 
-extension PhotosViewController: ImageLibrarySubscriber {
-    
-    func receive(images: [UIImage]) {
-        imageList = images
-        photosCollection.reloadData()
-    }
-}
+//extension PhotosViewController: ImageLibrarySubscriber {
+//
+//    func receive(images: [UIImage]) {
+//        imageList.removeAll()
+//        for i in images {
+//            if !imageList.contains(i) {
+//                imageList.append(i)
+//            }
+//        }
+//        photosCollection.reloadData()
+//    }
+//}
