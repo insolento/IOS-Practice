@@ -1,5 +1,5 @@
 import UIKit
-import iOSIntPackage
+//import iOSIntPackage
 
 class PhotosTableViewCell: UITableViewCell {
     

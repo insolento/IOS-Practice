@@ -1,9 +1,22 @@
+import Foundation
 import UIKit
 
 class FeedViewController: UIViewController {
-    let postController = PostViewController()
     
-    let feedModel = FeedModel()
+    var viewModel: FeedViewModelProtocol?
+    weak var coordinator: FeedCoordinator?
+    
+    init(viewModel: FeedViewModelProtocol, coordinator: FeedCoordinator) {
+        self.viewModel = viewModel
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    let postController = PostViewController()
     
     let passwordTextField: UITextField = {
         let field = UITextField()
@@ -35,21 +48,18 @@ class FeedViewController: UIViewController {
     
     let buttonToPost: CustomButton = {
         let buttonToPost = CustomButton(title: "Open Post", titleColor: .blue, radius: 0, backgroundColor: .clear)
-        //let buttonToPost = CustomButton(title: "Open Post", titleColor: .blue, completition: #selector(openPost))
         buttonToPost.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
         return buttonToPost
     }()
     
     let secondButton: CustomButton = {
         let buttonToPost = CustomButton(title: "Open Post", titleColor: .blue, radius: 0, backgroundColor: .clear)
-        //let buttonToPost = CustomButton(title: "Open Post", titleColor: .blue, completition: #selector(openPost))
         buttonToPost.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
         return buttonToPost
     }()
     
     let thirdButton: CustomButton = {
         let buttonToPost = CustomButton(title: "Open Post", titleColor: .blue, radius: 0, backgroundColor: .clear)
-        //let buttonToPost = CustomButton(title: "Open Post", titleColor: .blue, completition: #selector(openPost))
         buttonToPost.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
         return buttonToPost
     }()
@@ -84,36 +94,38 @@ class FeedViewController: UIViewController {
         buttonsFunctions()
         NotificationCenter.default.addObserver(self, selector: #selector(wrongWord), name: .wrongWordEvent, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(rightWord), name: .rightWordEvent, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(openPost), name: .openPost, object: nil)
     }
     
     func buttonsFunctions() {
         checkButton.function = { [weak self] in
-            self?.feedModel.check(self?.passwordTextField.text ?? "")
+            self?.viewModel?.checkWord(word: self?.passwordTextField.text ?? "")
         }
         buttonToPost.function = { [weak self] in
-            self?.openPost()
+            self?.viewModel?.openPost()
         }
         secondButton.function = { [weak self] in
-            self?.openPost()
+            self?.viewModel?.openPost()
         }
-        
+
         thirdButton.function = { [weak self] in
-            self?.openPost()
+            self?.viewModel?.openPost()
         }
     }
-    
-    @objc func openPost() {
-        self.navigationController?.pushViewController(postController, animated: true)
-    }
-    
+
     @objc func wrongWord() {
         coreectnessLabel.text = "Слово неверное"
         coreectnessLabel.textColor = .red
     }
-    
+
     @objc func rightWord() {
         coreectnessLabel.text = "Слово верное"
         coreectnessLabel.textColor = .green
+    }
+    
+    @objc func openPost() {
+        let postCoordinator = PostCoordinator()
+        postCoordinator.getCoordinator(navigation: navigationController ?? UINavigationController(), coordinator: postCoordinator)
     }
 
     func stackAddSubviews() {
@@ -137,9 +149,3 @@ class FeedViewController: UIViewController {
         ])
     }
 }
-
-extension NSNotification.Name {
-    static let wrongWordEvent = NSNotification.Name("wrongWord")
-    static let rightWordEvent = NSNotification.Name("rightWord")
-}
-

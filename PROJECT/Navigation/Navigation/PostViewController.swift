@@ -15,8 +15,8 @@ class PostViewController: UIViewController {
         view.addSubview(title)
     }
     @objc func openInfo() {
-        let infoViewController = InfoViewController()
-        present(infoViewController, animated: true, completion: nil)
+        let infoCoordinator = InfoCoordinator()
+        infoCoordinator.getCoordinator(navigation: navigationController, coordinator: infoCoordinator)
     }
 
 }
