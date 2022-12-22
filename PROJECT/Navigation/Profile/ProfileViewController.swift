@@ -178,20 +178,15 @@ extension ProfileViewController: UITableViewDataSource {
 
 extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let photosViewController = PhotosViewController()
-        
         if indexPath.row == 0 {
-            self.navigationController?.pushViewController(
-                photosViewController,
-                animated: true
-            )
+            let coordinator = PhotosCoordinator()
+            coordinator.getCoordinator(navigation: navigationController, coordinator: coordinator)
         }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let uiView = UIView()
         if section == 0 {
-            print(section)
             tableView.addSubview(headerView)
             headerView.heightAnchor.constraint(equalToConstant: 220).isActive = true
             headerView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.width).isActive = true

@@ -1,5 +1,5 @@
 import UIKit
-import iOSIntPackage
+//import iOSIntPackage
 
 protocol ReusableView: AnyObject {
     static var identifier: String { get }
