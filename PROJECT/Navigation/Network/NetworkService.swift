@@ -34,7 +34,7 @@ struct NetworkService {
                    print("========================================")
                    print("Debug description: \(error.debugDescription)")
                    print("========================================")
-                   print("Localized description: \(error?.localizedDescription)")
+                   print("Localized description: \(String(describing: error?.localizedDescription))")
                    print("========================================")
                }
                
