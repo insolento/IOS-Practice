@@ -13,8 +13,15 @@ class MainTabBarController: UITabBarController {
         setupLogin()
         setupProfile()
         self.viewControllers = [logInNavigationController, feedNavigationController]
-        
+        networkTest()
     }
+    
+    func networkTest() {
+        let networkService = NetworkService()
+        networkService.request(configuraion: .starships)
+    }
+    
+    
     
     func setupTabbar() {
         self.tabBar.backgroundColor = .systemGray6

@@ -10,7 +10,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         
         
-        
         let mainCoordinator = AppCoordinator(navigationController: UINavigationController())
         window?.rootViewController = mainCoordinator.start()
         window?.makeKeyAndVisible()

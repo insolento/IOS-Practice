@@ -111,6 +111,7 @@ class LogInViewController: UIViewController {
         layout()
         setupButton()
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
