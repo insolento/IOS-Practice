@@ -2,11 +2,12 @@ import Foundation
 import UIKit
 
 struct LoginInspector: LoginViewControllerDelegate {
-    func check(loginEntered: String, passwordEntered: String) -> Bool {
-        let check = Checker()
-        return check.check(loginEntered: loginEntered, passwordEntered: passwordEntered)
+    func check(loginEntered: String, passwordEntered: String) {
+        let check = CheckerService()
+        return check.checkCredentials(email: loginEntered, password: passwordEntered)
     }
-    func dance() {
-        print("We are dancing!!!")
+    func create(loginEntered: String, passwordEntered: String)  {
+        let check = CheckerService()
+        check.singUp(email: loginEntered, password: passwordEntered)
     }
 }

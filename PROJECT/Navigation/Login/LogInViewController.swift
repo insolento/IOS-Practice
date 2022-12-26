@@ -1,13 +1,43 @@
 import UIKit
 
+enum LoginMessage {
+    case newUser
+    case wrongInfo
+    case rightUser
+}
+
 class LogInViewController: UIViewController {
     
     var loginDelegate: LoginViewControllerDelegate?
     
     let activityIndicatorView = UIActivityIndicatorView(style: .medium)
     
-    let alertController: UIAlertController = {
-        let alert = UIAlertController(title: " Неправильный пароль ",
+    lazy var alertController: UIAlertController = {
+        let alert = UIAlertController(title: "",
+                                      message: "Вы можете попробовать ввести его снова",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Понятно", style: .default, handler: { _ in }))
+        return alert
+    }()
+    
+    lazy var wrongAlertController: UIAlertController = {
+        let alert = UIAlertController(title: "",
+                                      message: "Вы можете попробовать ввести его снова",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Понятно", style: .default, handler: { _ in }))
+        return alert
+    }()
+    
+    lazy var wrongInputAlertController: UIAlertController = {
+        let alert = UIAlertController(title: "",
+                                      message: "Вы можете попробовать ввести его снова",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Понятно", style: .default, handler: { _ in }))
+        return alert
+    }()
+    
+    lazy var passwordAlertController: UIAlertController = {
+        let alert = UIAlertController(title: "",
                                       message: "Вы можете попробовать ввести его снова",
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Понятно", style: .default, handler: { _ in }))
@@ -142,17 +172,64 @@ class LogInViewController: UIViewController {
 // Вариант с проверкой на ввод, оставлю закоменченным
     
     func logIn() {
-        let checkResults = loginDelegate?.check(loginEntered: login.text!, passwordEntered: password.text!)
-        if checkResults ?? false {
-            let coordinator = ProfileCoordinator()
-            #if DEBUG
-            coordinator.getCoordinator(navigation: navigationController, coordinator: coordinator, fullName: CurrentHipsterCat.user.fullName, userSrvice: CurrentHipsterCat)
-            #else
-            coordinator.getCoordinator(navigation: navigationController, coordinator: coordinator, fullName: TestUserService.user.fullName, userSrvice: TestUserService)
-            #endif
-        } else {
-            self.present(alertController, animated: true)
+        loginDelegate?.check(loginEntered: login.text!, passwordEntered: password.text!)
+//        if checkResults ?? false {
+//            let coordinator = ProfileCoordinator()
+//            #if DEBUG
+//            coordinator.getCoordinator(navigation: navigationController, coordinator: coordinator, fullName: CurrentHipsterCat.user.fullName, userSrvice: CurrentHipsterCat)
+//            #else
+//            coordinator.getCoordinator(navigation: navigationController, coordinator: coordinator, fullName: TestUserService.user.fullName, userSrvice: TestUserService)
+//            #endif
+//        } else {
+//            self.present(alertController, animated: true)
+//        }
+        NotificationCenter.default.addObserver(self, selector: #selector(rightPassword), name: .rightPasswordEvent, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(wrongPassword), name: .wrongPasswordEvent, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(newUser), name: .newUserEvent, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(wrongInput), name: .wrongInputEvent, object: nil)
+        if (login.text=="") || (password.text=="") {
+            alertController.title = "Вы не ввели логин или пароль"
+            //self.present(alertController, animated: true)
         }
+        
+        
+    }
+    
+    @objc func rightPassword() {
+        let coordinator = ProfileCoordinator()
+        coordinator.getCoordinator(navigation: navigationController, coordinator: coordinator, fullName: CurrentHipsterCat.user.fullName, userSrvice: CurrentHipsterCat)
+    }
+    
+    @objc func wrongPassword() {
+        wrongAlertController.title = "Вы ввели неправильный пароль"
+        self.present(wrongAlertController, animated: true)
+    }
+    
+    @objc func wrongInput() {
+        wrongInputAlertController.title = "Почта некорректна"
+        wrongInputAlertController.message = "Попробуйте ввести правильный email адрес, если это не помогло, обратитесь в службу поддержки"
+        self.present(wrongInputAlertController, animated: true)
+    }
+    
+    @objc func newUser() {
+        let newUserAllert: UIAlertController = {
+            let alert = UIAlertController(title: "Пользователь не найдет",
+                                          message: "Хотите создать нового пользователя с этими данными?",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Нет", style: .destructive))
+            alert.addAction(UIAlertAction(title: "Да", style: .cancel, handler: {_ in self.createNewUser()}))
+            return alert
+        }()
+        self.present(newUserAllert, animated: true)
+        if password.text!.count < 6 {
+            passwordAlertController.title = "Пароль должен быть 6 символов и больше"
+            self.present(passwordAlertController, animated: true)
+            passwordAlertController.dismiss(animated: true)
+        }
+    }
+    
+    func createNewUser() {
+        loginDelegate?.create(loginEntered: login.text!, passwordEntered: password.text!)
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -237,4 +314,12 @@ class LogInViewController: UIViewController {
             activityIndicatorView.heightAnchor.constraint(equalToConstant: 16),
         ])
     }
+}
+
+
+extension NSNotification.Name {
+    static let wrongPasswordEvent = NSNotification.Name("wrongPassword")
+    static let rightPasswordEvent = NSNotification.Name("rightPassword")
+    static let newUserEvent = NSNotification.Name("newUserEvent")
+    static let wrongInputEvent = NSNotification.Name("wrongInput")
 }
