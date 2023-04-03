@@ -8,6 +8,7 @@ target 'Navigation' do
   # Pods for Navigation
 
   pod 'SnapKit'
+  pod 'RealmSwift'
 
 end
 
@@ -18,6 +19,7 @@ target 'Navigation copy' do
   # Pods for Navigation copy
 
   pod 'SnapKit'
+  pod 'RealmSwift'
 
 end
 
@@ -28,5 +30,6 @@ target 'StorageService' do
   # Pods for StorageService
 
   pod 'SnapKit'
+  pod 'RealmSwift'
 
 end

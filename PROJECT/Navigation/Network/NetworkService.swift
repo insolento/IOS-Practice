@@ -1,5 +1,22 @@
 import Foundation
 import UIKit
+import RealmSwift
+
+class BestModel: Object {
+    // Свойства модели
+    @objc dynamic var executorName: String?
+    // Связь «один ко многим»
+    let listContentID = List<AllPlaylistContentId>()
+//    convenience required init(data: JSON) {
+//        self.init()
+//        self.executorName = data.string
+//    }
+}
+// Модель для связи
+class AllPlaylistContentId: Object {
+    @objc dynamic var name: String?
+}
+
 
 struct NetworkService {
     

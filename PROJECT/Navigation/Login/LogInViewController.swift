@@ -1,4 +1,5 @@
 import UIKit
+import KeychainAccess
 
 enum LoginMessage {
     case newUser
@@ -9,6 +10,8 @@ enum LoginMessage {
 class LogInViewController: UIViewController {
     
     var loginDelegate: LoginViewControllerDelegate?
+    
+    let keychain = Keychain(service: "keepLogedIn")
     
     let activityIndicatorView = UIActivityIndicatorView(style: .medium)
     
@@ -141,12 +144,20 @@ class LogInViewController: UIViewController {
         layout()
         setupButton()
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        
+        tryToLogIn()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.navigationController?.navigationBar.isHidden = true
+    }
+    
+    func tryToLogIn() {
+        try! login.text = keychain["username"]
+        try! password.text = keychain["password"]
+        if(login.text != "") {
+            logIn()
+        }
     }
     
     func setupButton() {
@@ -162,14 +173,7 @@ class LogInViewController: UIViewController {
         view.endEditing(true)
     }
     
-//    @objc func logIn() {
-//        if login.text!.count  > 0 {
-//            if password.text!.count > 0 {
-//                self.navigationController?.pushViewController(profile, animated: true)
-//            } else { print("Enter password!") }
-//        } else { print("Enter email or phone number!") }
-//    }
-// Вариант с проверкой на ввод, оставлю закоменченным
+
     
     func logIn() {
         loginDelegate?.check(loginEntered: login.text!, passwordEntered: password.text!)

@@ -94,6 +94,10 @@
 		2D69EA6B2914A83B00EFA260 /* BruteForce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D69EA6A2914A83B00EFA260 /* BruteForce.swift */; };
 		2D6B8FAA292ED0EF008ED091 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6B8FA9292ED0EF008ED091 /* NetworkService.swift */; };
 		2D6B8FAC292ED15C008ED091 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6B8FAB292ED15C008ED091 /* AppConfiguration.swift */; };
+		2D9765C029D9F995004D9C47 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 2D9765BF29D9F995004D9C47 /* Realm */; };
+		2D9765C229D9F995004D9C47 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2D9765C129D9F995004D9C47 /* RealmSwift */; };
+		2D9765C529DB8996004D9C47 /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9765C429DB8996004D9C47 /* LoginModel.swift */; };
+		2D9765C829DB94A2004D9C47 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 2D9765C729DB94A2004D9C47 /* KeychainAccess */; };
 		2DB1EF0A29550EAA005DE5E7 /* CheckerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1EF0929550EAA005DE5E7 /* CheckerService.swift */; };
 		5E30B5AE06F451D5C239E4B8 /* Pods_StorageService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D672B685F2228B2224E0E80F /* Pods_StorageService.framework */; };
 		72334CB018DA99D00A639461 /* Pods_Navigation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EA84373E1C71EBAE32F8C58 /* Pods_Navigation.framework */; };
@@ -186,6 +190,7 @@
 		2D69EA6A2914A83B00EFA260 /* BruteForce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BruteForce.swift; sourceTree = "<group>"; };
 		2D6B8FA9292ED0EF008ED091 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		2D6B8FAB292ED15C008ED091 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
+		2D9765C429DB8996004D9C47 /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
 		2DB1EF0929550EAA005DE5E7 /* CheckerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckerService.swift; sourceTree = "<group>"; };
 		772466F936A826CF8AE2F6EB /* Pods-StorageService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StorageService.debug.xcconfig"; path = "Target Support Files/Pods-StorageService/Pods-StorageService.debug.xcconfig"; sourceTree = "<group>"; };
 		9EA84373E1C71EBAE32F8C58 /* Pods_Navigation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Navigation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -214,6 +219,7 @@
 				2D6991232958D3B400F020D8 /* FirebaseCrashlytics in Frameworks */,
 				2D69913B2958D3B400F020D8 /* FirebaseMLModelDownloader in Frameworks */,
 				2D6991272958D3B400F020D8 /* FirebaseDatabaseSwift in Frameworks */,
+				2D9765C829DB94A2004D9C47 /* KeychainAccess in Frameworks */,
 				2D69912B2958D3B400F020D8 /* FirebaseFirestore in Frameworks */,
 				2D6991392958D3B400F020D8 /* FirebaseInstallations in Frameworks */,
 				2D6991332958D3B400F020D8 /* FirebaseFunctionsCombine-Community in Frameworks */,
@@ -226,10 +232,12 @@
 				2D6991432958D3B500F020D8 /* FirebaseRemoteConfigSwift in Frameworks */,
 				2D6991172958D3B400F020D8 /* FirebaseAnalyticsSwift in Frameworks */,
 				2D69911D2958D3B400F020D8 /* FirebaseAppDistribution-Beta in Frameworks */,
+				2D9765C029D9F995004D9C47 /* Realm in Frameworks */,
 				2D6991412958D3B500F020D8 /* FirebaseRemoteConfig in Frameworks */,
 				2D6991452958D3B500F020D8 /* FirebaseStorage in Frameworks */,
 				2D6991212958D3B400F020D8 /* FirebaseAuthCombine-Community in Frameworks */,
 				2D6991472958D3B500F020D8 /* FirebaseStorageCombine-Community in Frameworks */,
+				2D9765C229D9F995004D9C47 /* RealmSwift in Frameworks */,
 				2D6991352958D3B400F020D8 /* FirebaseInAppMessaging-Beta in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -353,6 +361,7 @@
 				24D6E23828BBF5E000114BD7 /* Checker.swift */,
 				24D6E23A28BBFAA900114BD7 /* LoginInspector.swift */,
 				2DB1EF0929550EAA005DE5E7 /* CheckerService.swift */,
+				2D9765C429DB8996004D9C47 /* LoginModel.swift */,
 			);
 			path = Checker;
 			sourceTree = "<group>";
@@ -518,6 +527,9 @@
 				2D6991422958D3B500F020D8 /* FirebaseRemoteConfigSwift */,
 				2D6991442958D3B500F020D8 /* FirebaseStorage */,
 				2D6991462958D3B500F020D8 /* FirebaseStorageCombine-Community */,
+				2D9765BF29D9F995004D9C47 /* Realm */,
+				2D9765C129D9F995004D9C47 /* RealmSwift */,
+				2D9765C729DB94A2004D9C47 /* KeychainAccess */,
 			);
 			productName = Navigation;
 			productReference = 249306BB28034410005C95C4 /* Navigation.app */;
@@ -593,6 +605,8 @@
 			packageReferences = (
 				24272F4928BEE9E7007770A7 /* XCRemoteSwiftPackageReference "iOSIntPackage" */,
 				2D6991112958D3B400F020D8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				2D9765BE29D9F995004D9C47 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				2D9765C629DB94A1004D9C47 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			productRefGroup = 241498D3275B9B63003CB903;
 			projectDirPath = "";
@@ -769,6 +783,7 @@
 				2D3548232911C54A00D0EEEE /* LoginCoordinator.swift in Sources */,
 				242B835B2785928E00474E9E /* LogInViewController.swift in Sources */,
 				2D35481C2910472E00D0EEEE /* MainTabBarController.swift in Sources */,
+				2D9765C529DB8996004D9C47 /* LoginModel.swift in Sources */,
 				24AF5F8A276E321C00320B24 /* ProfileHeaderView.swift in Sources */,
 				24272F4E28BF1340007770A7 /* CustomButton.swift in Sources */,
 				2D35481F29119EE800D0EEEE /* FeedCoordinator.swift in Sources */,
@@ -1193,6 +1208,22 @@
 				minimumVersion = 9.0.0;
 			};
 		};
+		2D9765BE29D9F995004D9C47 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		2D9765C629DB94A1004D9C47 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1335,6 +1366,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2D6991112958D3B400F020D8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
+		};
+		2D9765BF29D9F995004D9C47 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D9765BE29D9F995004D9C47 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		2D9765C129D9F995004D9C47 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D9765BE29D9F995004D9C47 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		2D9765C729DB94A2004D9C47 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D9765C629DB94A1004D9C47 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
