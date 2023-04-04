@@ -1,5 +1,6 @@
 import UIKit
 import KeychainAccess
+import RealmSwift
 
 enum LoginMessage {
     case newUser
@@ -11,7 +12,9 @@ class LogInViewController: UIViewController {
     
     var loginDelegate: LoginViewControllerDelegate?
     
-    let keychain = Keychain(service: "keepLogedIn")
+    let defaults = UserDefaults.standard
+    
+    let realm = try! Realm()
     
     let activityIndicatorView = UIActivityIndicatorView(style: .medium)
     
@@ -139,6 +142,7 @@ class LogInViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
+        
         addSubviews()
         view.addGestureRecognizer(tap)
         layout()
@@ -153,10 +157,17 @@ class LogInViewController: UIViewController {
     }
     
     func tryToLogIn() {
-        try! login.text = keychain["username"]
-        try! password.text = keychain["password"]
-        if(login.text != "") {
-            logIn()
+        let currentUser = defaults.string(forKey: "currentUser") ?? ""
+        if (currentUser != "") {
+            let results = realm.objects(LoginModel.self)
+            for i in results {
+                if i.login == currentUser {
+                    login.text = i.login ?? ""
+                    password.text = i.password ?? ""
+                    logIn()
+                    break
+                }
+            }
         }
     }
     
@@ -195,8 +206,6 @@ class LogInViewController: UIViewController {
             alertController.title = "Вы не ввели логин или пароль"
             //self.present(alertController, animated: true)
         }
-        
-        
     }
     
     @objc func rightPassword() {

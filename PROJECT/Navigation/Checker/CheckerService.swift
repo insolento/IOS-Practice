@@ -10,7 +10,7 @@ protocol CheckerServiceProtocol {
 
 class CheckerService: CheckerServiceProtocol {
     let realm = try! Realm()
-    let keychain = Keychain(service: "keepLogedIn")
+    let defaults = UserDefaults.standard
     
     func checkCredentials(email: String, password: String) {
         Auth.auth().signIn(withEmail: email, password: password) { authresult, error in
@@ -26,8 +26,7 @@ class CheckerService: CheckerServiceProtocol {
                 }
             } else {
                 NotificationCenter.default.post(name: .rightPasswordEvent, object: nil)
-                self.keychain["username"] = email
-                self.keychain["password"] = password
+                self.defaults.set(email, forKey: "currentUser")
             }
             
         }
@@ -38,12 +37,14 @@ class CheckerService: CheckerServiceProtocol {
             print("Error = \(error)")
             print("Responce = \(responce)")
         }
-        var login = LoginModel()
+        let login = LoginModel()
         login.login = email
         login.password = password
-        try! realm.write {
-            realm.add(login)
-        }
+        do {
+            try realm.write {
+                realm.add(login)
+            }
+        } catch { }
     }
     
     
