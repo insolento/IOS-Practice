@@ -1,4 +1,5 @@
 import UIKit
+//import iOSIntPackage
 
 class PhotosTableViewCell: UITableViewCell {
     
@@ -82,6 +83,7 @@ class PhotosTableViewCell: UITableViewCell {
         addSubviews()
         autoresizingMask()
         layout()
+        //filtering()
     }
     
     func addSubviews() {
@@ -117,6 +119,13 @@ class PhotosTableViewCell: UITableViewCell {
         stackView.translatesAutoresizingMaskIntoConstraints = false
     }
     
+//    func filtering() {
+//        firstPhoto.image = filter(firstPhoto.image ?? UIImage())
+//        secondPhoto.image = filter(secondPhoto.image ?? UIImage())
+//        thirdPhoto.image = filter(thirdPhoto.image ?? UIImage())
+//        forthPhoto.image = filter(forthPhoto.image ?? UIImage())
+//    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -124,5 +133,14 @@ class PhotosTableViewCell: UITableViewCell {
     func update(_ data: String) {
         print(data)
     }
+    
+//    func filter(_ image: UIImage) -> UIImage {
+//        var actualPhoto = image
+//        let imageProcessor = ImageProcessor()
+//        let filters: [ColorFilter] = [.colorInvert, .fade, .chrome, .noir]
+//        let filter: ColorFilter = filters.randomElement() ?? .fade
+//        imageProcessor.processImage(sourceImage: actualPhoto , filter: filter) { filteredImage in actualPhoto = filteredImage ?? UIImage()}
+//        return actualPhoto
+//    }
     
 }
