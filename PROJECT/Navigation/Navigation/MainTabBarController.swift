@@ -5,6 +5,7 @@ class MainTabBarController: UITabBarController {
     
     var logInNavigationController = UINavigationController()
     var feedNavigationController = UINavigationController()
+    var favouritesNavigationController = UINavigationController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -12,7 +13,8 @@ class MainTabBarController: UITabBarController {
         setupTabbar()
         setupLogin()
         setupProfile()
-        self.viewControllers = [logInNavigationController, feedNavigationController]
+        setupFavourites()
+        self.viewControllers = [logInNavigationController, favouritesNavigationController, feedNavigationController]
         networkTest()
     }
     
@@ -51,7 +53,18 @@ class MainTabBarController: UITabBarController {
         let feedName = UITabBarItem()
         feedName.title = "Feed"
         feedName.image = UIImage(systemName: "house")
-    feedNavigationController.tabBarItem = feedName
+        feedNavigationController.tabBarItem = feedName
+    }
+    
+    func setupFavourites() {
+        let coordinator = FavouritesCoordinator()
+        let favourites = coordinator.getCoordinator(coordinator: coordinator)
+        favouritesNavigationController = UINavigationController(rootViewController: favourites)
+        let favouritesName = UITabBarItem()
+        favouritesName.title = "Favourites"
+        favouritesName.image = UIImage(systemName: "heart")
+        favouritesNavigationController.tabBarItem = favouritesName
+        favouritesNavigationController.navigationBar.topItem?.title = "Favourites"
     }
 
     

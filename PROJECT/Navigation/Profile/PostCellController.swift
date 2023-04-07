@@ -3,6 +3,8 @@ import iOSIntPackage
 
 class PostCellController: UITableViewCell {
     
+    var post: Post = Post(id: UUID(), author: "", image: "cat", likes: 0, views: 0)
+    
     let postTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -68,12 +70,13 @@ class PostCellController: UITableViewCell {
          return actualPhoto
      }
     
-    public func update(author: String, description: String, image: String, likes: Int, views: Int) {    
-        postTitle.text = author
-        postDescription.text = description
-        postImage.image =  filter(UIImage(named: image) ?? UIImage())
-        postLikes.text = "Likes:" + String(likes)
-        postViews.text = "Views:" + String(views)
+    public func update(post: Post) {
+        postTitle.text = post.author
+        postDescription.text = post.description
+        postImage.image =  filter(UIImage(named: post.image) ?? UIImage())
+        postLikes.text = "Likes:" + String(post.likes)
+        postViews.text = "Views:" + String(post.views)
+        self.post = post
     }
     
     func addSubviews() {

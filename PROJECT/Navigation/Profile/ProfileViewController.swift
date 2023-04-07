@@ -22,13 +22,7 @@ class ProfileViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate let postInf: [(String, String, String, Int, Int)] = [
-        ("holliwood_news", PostDescriptions.holliwoodNewsHamilton, "holliwoodNewsHamiltonPhoto", 2446,5400),
-        ("ottofab", PostDescriptions.ottofabDog, "ottofabDogPhoto", 17428, 25345),
-        ("sphynxcatlovers", PostDescriptions.sphynxcatloversCat, "sphynxcatloversCatPhoto", 3034, 12550),
-        ("infocar.ua", PostDescriptions.infocarSilverado, "infocarSilveradoPhoto", 445, 1200),
-        ("marvel", PostDescriptions.marvelEternals, "marvelEternalsPhoto", 1266291, 13544234),
-    ]
+    let posts = Posts()
 
     fileprivate enum CellReuseIdentifiers: String {
         case post = "PostCellReuse"
@@ -66,6 +60,7 @@ class ProfileViewController: UIViewController {
         
         tableView.dataSource = self
         tableView.delegate = self
+        setUpGestureRecognizer()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -122,7 +117,7 @@ extension ProfileViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 1
-        } else { return postInf.count }
+        } else { return posts.postsArray.count }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -144,9 +139,9 @@ extension ProfileViewController: UITableViewDataSource {
             }
             
             // update data
-            let data = postInf[indexPath.row]
+            let data = posts.postsArray[indexPath.row]
 
-            cell.update(author: data.0, description: data.1, image: data.2, likes: data.3, views: data.4)
+            cell.update(post: data)
 
             return cell
         }
@@ -177,12 +172,6 @@ extension ProfileViewController: UITableViewDataSource {
 }
 
 extension ProfileViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            let coordinator = PhotosCoordinator()
-            coordinator.getCoordinator(navigation: navigationController, coordinator: coordinator)
-        }
-    }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let uiView = UIView()
@@ -193,5 +182,26 @@ extension ProfileViewController: UITableViewDelegate {
             headerView.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -10).isActive = true
             return headerView
         } else { return uiView  }
+    }
+}
+
+extension ProfileViewController {
+    private func setUpGestureRecognizer() {
+        
+        let doubleTapGestureOnCell = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap))
+        doubleTapGestureOnCell.numberOfTapsRequired = 2
+        tableView.addGestureRecognizer(doubleTapGestureOnCell)
+    }
+
+    
+    @objc private func handleDoubleTap(_ tapGesture: UITapGestureRecognizer) {
+        if tapGesture.state == .ended {
+            let location = tapGesture.location(in: self.tableView)
+            if let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) as? PostCellController {
+                DataBaseModel.shared.addFavoritePost(post: cell.post)
+                print(DataBaseModel.shared.getFavoritePosts().count)
+                print("Post added")
+            }
+        }
     }
 }
